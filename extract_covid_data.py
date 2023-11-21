@@ -17,3 +17,15 @@ def get_database_conn():
     db_name =config.get('DB_NAME')
     conn = create_engine(f'postgresql+psycopg2://{db_user_name}:{db_password}@{host}:{port}/{db_name}')
     return conn
+
+conn = get_database_conn()
+
+def extract_csv_data(): 
+    file_id = "1SzmRIwlpL5PrFuaUe_1TAcMV0HYHMD_b"
+    url = f"https://drive.google.com/uc?id={file_id}"
+    response = requests.get(url)
+    covid_data = response.text
+    df = pd.read_csv(StringIO(covid_data))
+    df.columns = df.columns.str.lower()
+    df.to_csv('raw/covid_19_data.csv', index = False)
+    print('covid_19_data written successfully to csv file')
