@@ -29,3 +29,16 @@ def extract_csv_data():
     df.columns = df.columns.str.lower()
     df.to_csv('raw/covid_19_data.csv', index = False)
     print('covid_19_data written successfully to csv file')
+    
+   
+def load_to_db():
+    data = pd.read_csv('raw/covid_19_data.csv')
+    data.to_sql('covid_data', con =get_database_conn(), if_exists = 'replace', index = False)
+    print('Data loaded successfully to postgres')
+
+
+def main():
+    extract_csv_data()
+    load_to_db()
+    
+main()   
